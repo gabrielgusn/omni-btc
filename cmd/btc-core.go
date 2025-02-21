@@ -16,9 +16,9 @@ func CallBitcoinCoreRPC(method string, params []interface{}, rpcUrl string, rpcU
 
 	reqBody, err := json.Marshal(RpcRequest{
 		JsonRpcVersion: "1.0",
-		Id:             "getblockhash",
-		Method:         method,
-		Params:         params,
+		Id:             "curltest",
+		Method:         "getblockhash",
+		Params:         []int{10},
 	})
 	if err != nil {
 		// return nil, err
@@ -27,7 +27,7 @@ func CallBitcoinCoreRPC(method string, params []interface{}, rpcUrl string, rpcU
 
 	}
 
-	req, err := http.NewRequest("POST", "http://127.0.0.1:18444", bytes.NewBuffer((reqBody)))
+	req, err := http.NewRequest("POST", "http://127.0.0.1:18443", bytes.NewBuffer((reqBody)))
 	if err != nil {
 		// return nil, err
 		fmt.Println("Error on newreq:", err)
@@ -35,6 +35,8 @@ func CallBitcoinCoreRPC(method string, params []interface{}, rpcUrl string, rpcU
 
 	}
 
+	fmt.Println("Will send the request")
+	fmt.Println(req)
 	req.SetBasicAuth(rpcUser, rpcPass)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -56,12 +58,13 @@ func CallBitcoinCoreRPC(method string, params []interface{}, rpcUrl string, rpcU
 		return
 	}
 
-	// var rpcResp RpcResponse
-	// if err := json.Unmarshal(body, &rpcResp); err != nil {
-	// return nil, err
-	// }
+	var rpcResp RpcResponse
+	if err := json.Unmarshal(body, &rpcResp); err != nil {
+		// return nil, err
+		fmt.Println("Error Unmarshal:", err)
+	}
 
-	fmt.Println("Response:", string(body))
+	fmt.Println("Response:", rpcResp.Result)
 	// return &rpcResp, nil
 }
 

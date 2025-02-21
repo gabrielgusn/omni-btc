@@ -7,11 +7,11 @@ import (
 )
 
 type RpcRequest struct {
-	JsonRpcVersion string        `json:"jsonrpc"`
-	Id             string        `json:"id"`
-	Backend        string        `json:"backend"`
-	Method         string        `json:"method"`
-	Params         []interface{} `json:"params"`
+	JsonRpcVersion string `json:"jsonrpc"`
+	Id             string `json:"id"`
+	Backend        string `json:"backend"`
+	Method         string `json:"method"`
+	Params         []int  `json:"params"`
 }
 
 type RpcResponse struct {
@@ -31,12 +31,9 @@ func HandleRpcRequest(w http.ResponseWriter, r *http.Request, url string, user s
 
 	switch strings.ToLower(req.Backend) {
 	case "bitcoind":
-		/*response, err = */ CallBitcoinCoreRPC(req.Method, req.Params, url, user, pass)
-		// if err != nil {
-		// fmt.Println("Error:", err)
-		// os.Exit(1)
-		// }
-		// fmt.Println(response)
+		CallBitcoinCoreRPC(req.Method, nil, url, user, pass)
+		// case "btcd":
+		// 	CallBtcdRPC(req.Method, nil, url, user, pass)
 	}
 
 	if err != nil {
