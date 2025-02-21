@@ -1,3 +1,288 @@
+# electrum
+```
+electrum help
+usage: electrum [-h] [--version] [-v VERBOSITY] [-V VERBOSITY_SHORTCUTS] [-D ELECTRUM_PATH] [-P] [--testnet] [--testnet4]
+                [--regtest] [--simnet] [--signet] [-o] [--rpcuser RPCUSER] [--rpcpassword RPCPASSWORD] [-w WALLET_PATH]
+                [--forgetconfig]
+                <command> ...
+
+positional arguments:
+  <command>
+    gui                 Run GUI (default)
+    daemon              Run Daemon
+    add_peer
+    add_request         Create a payment request, using the first unused address of the wallet
+    addtransaction      Add a transaction to the wallet history
+    broadcast           Broadcast a transaction to the network
+    bumpfee             Bump the fee for an unconfirmed transaction
+    changegaplimit      Change the gap limit of the wallet
+    clear_invoices      Remove all invoices
+    clear_ln_blacklist
+    clear_requests      Remove all payment requests
+    close_channel
+    close_wallet        Close wallet
+    commands            List of commands
+    convert_currency    Converts the given amount of currency to another using the configured exchange rate source
+    convert_xkey        Convert xtype of a master key
+    create              Create a new wallet
+    createmultisig      Create multisig address
+    createnewaddress    Create a new receiving address, beyond the gap limit of the wallet
+    decode_invoice
+    decrypt             Decrypt a message encrypted with a public key
+    delete_invoice      Remove an outgoing payment invoice
+    delete_request      Remove an incoming payment request
+    deserialize         Deserialize a serialized transaction
+    dumpprivkeys        Deprecated
+    enable_htlc_settle
+    encrypt             Encrypt a message with a public key
+    export_channel_backup
+    freeze              Freeze address
+    freeze_utxo         Freeze a UTXO so that the wallet will not spend it
+    get                 Return item from wallet storage
+    get_channel_ctx     return the current commitment transaction of a channel
+    get_invoice         Returns an invoice (request for outgoing payment)
+    get_request         Returns a payment request
+    get_tx_status       Returns some information regarding the tx
+    get_watchtower_ctn  return the local watchtower's ctn of channel
+    getaddressbalance   Return the balance of any address
+    getaddresshistory   Return the transaction history of any address
+    getaddressunspent   Returns the UTXO list of any address
+    getalias            Retrieve alias
+    getbalance          Return the balance of your wallet
+    getconfig           Return a configuration variable
+    getfeerate          Return current fee rate settings and current estimate (in sat/kvByte)
+    getinfo             network info
+    getmasterprivate    Get master private key
+    getmerkle           Get Merkle branch of a transaction included in a block
+    getminacceptablegap
+                        Returns the minimum value for gap limit that would be sufficient to discover all known addresses in
+                        the wallet
+    getmpk              Get master public key
+    getprivatekeyforpath
+                        Get private key corresponding to derivation path (address index)
+    getprivatekeys      Get private keys of addresses
+    getpubkeys          Return the public keys for a wallet address
+    getseed             Get seed phrase
+    getservers          Return the list of known servers (candidates for connecting)
+    gettransaction      Retrieve a transaction
+    getunusedaddress    Returns the first unused address of the wallet, or None if all addresses are used
+    help
+    import_channel_backup
+    importprivkey       Import a private key
+    is_synchronized     return wallet synchronization status
+    ismine              Check if address is in wallet
+    lightning_history   lightning history
+    list_channels
+    list_invoices       Returns the list of invoices (requests for outgoing payments) saved in the wallet
+    list_peers
+    list_requests       Returns the list of incoming payment requests saved in the wallet
+    list_wallets        List wallets open in daemon
+    listaddresses       List wallet addresses
+    listcontacts        Show your list of contacts
+    listunspent         List unspent outputs
+    lnpay
+    load_wallet         Load the wallet in memory
+    make_seed           Create a seed
+    nodeid
+    normal_swap         Normal submarine swap: send on-chain BTC, receive on Lightning Note that your funds will be locked
+                        for 24h if you do not have enough incoming capacity
+    notify              Watch an address
+    onchain_history     Wallet onchain history
+    open_channel
+    password            Change wallet password
+    payto               Create a transaction
+    paytomany           Create a multi-output transaction
+    rebalance_channels  Rebalance channels
+    removelocaltx       Remove a 'local' transaction from the wallet, and its dependent transactions
+    request_force_close
+                        Requests the remote to force close a channel
+    reset_liquidity_hints
+    restore             Restore a wallet from text
+    reverse_swap        Reverse submarine swap: send on Lightning, receive on-chain
+    searchcontacts      Search through contacts, return matching entries
+    serialize           Create a signed raw transaction from a json tx template
+    setconfig           Set a configuration variable
+    setfeerate          Set fee rate estimation method and value
+    setlabel            Assign a label to an item
+    signmessage         Sign a message with a key
+    signtransaction     Sign a transaction
+    signtransaction_with_privkey
+                        Sign a transaction
+    stop                Stop daemon
+    sweep               Sweep private keys
+    unfreeze            Unfreeze address
+    unfreeze_utxo       Unfreeze a UTXO so that the wallet might spend it
+    validateaddress     Check that an address is valid
+    verifymessage       Verify a signature
+    version             Return the version of Electrum
+    version_info        Return information about dependencies, such as their version and path
+
+options:
+  -h, --help            show this help message and exit
+  --version             Return the version of Electrum.
+  -w, --wallet WALLET_PATH
+                        wallet path
+  --forgetconfig        Forget config on exit
+
+global options:
+  -v VERBOSITY          Set verbosity (log levels)
+  -V VERBOSITY_SHORTCUTS
+                        Set verbosity (shortcut-filter list)
+  -D, --dir ELECTRUM_PATH
+                        electrum directory
+  -P, --portable        Use local 'electrum_data' directory
+  --testnet             Use Testnet
+  --testnet4            Use Testnet4
+  --regtest             Use Regtest
+  --simnet              Use Simnet
+  --signet              Use Signet
+  -o, --offline         Run offline
+  --rpcuser RPCUSER     RPC user
+  --rpcpassword RPCPASSWORD
+                        RPC password
+```
+
+# bitcoin-cli
+```
+bitcoin-cli --help
+Bitcoin Core RPC client version v27.0.0
+
+Usage:  bitcoin-cli [options] <command> [params]  Send command to Bitcoin Core
+or:     bitcoin-cli [options] -named <command> [name=value]...  Send command to Bitcoin Core (with named arguments)
+or:     bitcoin-cli [options] help                List commands
+or:     bitcoin-cli [options] help <command>      Get help for a command
+
+Options:
+
+  -?
+       Print this help message and exit
+
+  -addrinfo
+       Get the number of addresses known to the node, per network and total,
+       after filtering for quality and recency. The total number of
+       addresses known to the node may be higher.
+
+  -color=<when>
+       Color setting for CLI output (default: auto). Valid values: always, auto
+       (add color codes when standard output is connected to a terminal
+       and OS is not WIN32), never.
+
+  -conf=<file>
+       Specify configuration file. Relative paths will be prefixed by datadir
+       location. (default: bitcoin.conf)
+
+  -datadir=<dir>
+       Specify data directory
+
+  -generate
+       Generate blocks, equivalent to RPC getnewaddress followed by RPC
+       generatetoaddress. Optional positional integer arguments are
+       number of blocks to generate (default: 1) and maximum iterations
+       to try (default: 1000000), equivalent to RPC generatetoaddress
+       nblocks and maxtries arguments. Example: bitcoin-cli -generate 4
+       1000
+
+  -getinfo
+       Get general information from the remote server. Note that unlike
+       server-side RPC calls, the output of -getinfo is the result of
+       multiple non-atomic requests. Some entries in the output may
+       represent results from different states (e.g. wallet balance may
+       be as of a different block from the chain state reported)
+
+  -named
+       Pass named instead of positional arguments (default: false)
+
+  -netinfo
+       Get network peer connection information from the remote server. An
+       optional integer argument from 0 to 4 can be passed for different
+       peers listings (default: 0). Pass "help" for detailed help
+       documentation.
+
+  -rpcclienttimeout=<n>
+       Timeout in seconds during HTTP requests, or 0 for no timeout. (default:
+       900)
+
+  -rpcconnect=<ip>
+       Send commands to node running on <ip> (default: 127.0.0.1)
+
+  -rpccookiefile=<loc>
+       Location of the auth cookie. Relative paths will be prefixed by a
+       net-specific datadir location. (default: data dir)
+
+  -rpcpassword=<pw>
+       Password for JSON-RPC connections
+
+  -rpcport=<port>
+       Connect to JSON-RPC on <port> (default: 8332, testnet: 18332, signet:
+       38332, regtest: 18443)
+
+  -rpcuser=<user>
+       Username for JSON-RPC connections
+
+  -rpcwait
+       Wait for RPC server to start
+
+  -rpcwaittimeout=<n>
+       Timeout in seconds to wait for the RPC server to start, or 0 for no
+       timeout. (default: 0)
+
+  -rpcwallet=<walletname>
+       Send RPC for non-default wallet on RPC server (needs to exactly match
+       corresponding -wallet option passed to bitcoind). This changes
+       the RPC endpoint used, e.g.
+       http://127.0.0.1:8332/wallet/<walletname>
+
+  -stdin
+       Read extra arguments from standard input, one per line until EOF/Ctrl-D
+       (recommended for sensitive information such as passphrases). When
+       combined with -stdinrpcpass, the first line from standard input
+       is used for the RPC password.
+
+  -stdinrpcpass
+       Read RPC password from standard input as a single line. When combined
+       with -stdin, the first line from standard input is used for the
+       RPC password. When combined with -stdinwalletpassphrase,
+       -stdinrpcpass consumes the first line, and -stdinwalletpassphrase
+       consumes the second.
+
+  -stdinwalletpassphrase
+       Read wallet passphrase from standard input as a single line. When
+       combined with -stdin, the first line from standard input is used
+       for the wallet passphrase.
+
+  -version
+       Print version and exit
+
+Debugging/Testing options:
+
+Chain selection options:
+
+  -chain=<chain>
+       Use the chain <chain> (default: main). Allowed values: main, test,
+       signet, regtest
+
+  -signet
+       Use the signet chain. Equivalent to -chain=signet. Note that the network
+       is defined by the -signetchallenge parameter
+
+  -signetchallenge
+       Blocks must satisfy the given script to be considered valid (only for
+       signet networks; defaults to the global default signet test
+       network challenge)
+
+  -signetseednode
+       Specify a seed node for the signet network, in the hostname[:port]
+       format, e.g. sig.net:1234 (may be used multiple times to specify
+       multiple seed nodes; defaults to the global default signet test
+       network seed node(s))
+
+  -testnet
+       Use the test chain. Equivalent to -chain=test.
+3m
+
+```
+
+# bitcoind
 ```
 bitcoind --help
 Bitcoin Core version v27.0.0
