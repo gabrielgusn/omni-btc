@@ -1,11 +1,8 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
-	"os/exec"
 	"strconv"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -30,24 +27,30 @@ func GetBlockHashCmd(height uint32) *cobra.Command {
 	return cmd
 }
 
-// Wrapper function for spawning bitcoin core commands
-func BtcCoreCli(cmd string) ([]byte, error) {
-	args := strings.Split(cmd, " ")
+func GetBlockHashRpc(height uint32) *cobra.Command {
+	// var rpcUser string
+	// var rpcPass string
+	var cmd = &cobra.Command{
+		Use:   "getblockhash",
+		Short: "Get block hash by height",
+		Run: func(cmd *cobra.Command, args []string) {
+			var paramsInterface []interface{}
+			paramsInterface = append(paramsInterface, height)
+			/*response, err := */ CallBitcoinCoreRPC("getblockhash", paramsInterface, "localhost:18333", "alice", "password")
+			// if err != nil {
+			// 	fmt.Println("Error while calling rpc:", err)
+			// 	return
+			// }
 
-	command := exec.Command("bitcoin-cli", args...)
-
-	out, err := command.CombinedOutput()
-
-	if err != nil {
-		fmt.Println(string(out))
-		return nil, fmt.Errorf("error executing command: %s", cmd)
+			// fmt.Println("Response:", string(response.Result))
+		},
 	}
 
-	if command.ProcessState.Success() {
-		return out, nil
-	} else {
-		return bytes.TrimSpace(out), nil
-	}
+	cmd.Flags().Uint32Var(&height, "height", 0, "Block Height")
+	// cmd.Flags().StringVarP(&rpcUser, "rpcuser", "u", "", "Block Height")
+	// cmd.Flags().StringVarP(&rpcPass, "rpcpass", "p", "", "Block Height")
+
+	return cmd
 }
 
 // Wrapper function for the Btcd commands

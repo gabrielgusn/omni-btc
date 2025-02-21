@@ -9,6 +9,6 @@ func main() {
 	var rootCommand = &cobra.Command{}
 	var height uint32
 
-	rootCommand.AddCommand(cmd.GetBlockHashCmd(height))
+	rootCommand.AddCommand(cmd.GetBlockHashRpc(height))
 	rootCommand.Execute()
 }
