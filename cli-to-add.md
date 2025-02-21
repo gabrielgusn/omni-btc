@@ -937,3 +937,769 @@ RPC server options:
   -server
        Accept command line and JSON-RPC commands
 ```
+
+# lnd-cli
+
+```
+Usage:
+  lnd [OPTIONS]
+
+Application Options:
+  -V, --version                                              Display version information and exit
+      --lnddir=                                              The base directory that contains lnd's data, logs, configuration
+                                                             file, etc. This option overwrites all other directory options.
+                                                             (default: /home/kio/.lnd)
+  -C, --configfile=                                          Path to configuration file (default: /home/kio/.lnd/lnd.conf)
+  -b, --datadir=                                             The directory to store lnd's data within (default:
+                                                             /home/kio/.lnd/data)
+      --sync-freelist                                        Whether the databases used within lnd should sync their freelist
+                                                             to disk. This is disabled by default resulting in improved memory
+                                                             performance during operation, but with an increase in startup
+                                                             time.
+      --tlscertpath=                                         Path to write the TLS certificate for lnd's RPC and REST services
+                                                             (default: /home/kio/.lnd/tls.cert)
+      --tlskeypath=                                          Path to write the TLS private key for lnd's RPC and REST services
+                                                             (default: /home/kio/.lnd/tls.key)
+      --tlsextraip=                                          Adds an extra ip to the generated certificate
+      --tlsextradomain=                                      Adds an extra domain to the generated certificate
+      --tlsautorefresh                                       Re-generate TLS certificate and key if the IPs or domains are
+                                                             changed
+      --tlsdisableautofill                                   Do not include the interface IPs or the system hostname in TLS
+                                                             certificate, use first --tlsextradomain as Common Name instead,
+                                                             if set
+      --tlscertduration=                                     The duration for which the auto-generated TLS certificate will be
+                                                             valid for (default: 10080h0m0s)
+      --tlsencryptkey                                        Automatically encrypts the TLS private key and generates
+                                                             ephemeral TLS key pairs when the wallet is locked or not
+                                                             initialized
+      --no-macaroons                                         Disable macaroon authentication, can only be used if server is
+                                                             not listening on a public interface.
+      --adminmacaroonpath=                                   Path to write the admin macaroon for lnd's RPC and REST services
+                                                             if it doesn't exist
+      --readonlymacaroonpath=                                Path to write the read-only macaroon for lnd's RPC and REST
+                                                             services if it doesn't exist
+      --invoicemacaroonpath=                                 Path to the invoice-only macaroon for lnd's RPC and REST services
+                                                             if it doesn't exist
+      --logdir=                                              Directory to log output. (default: /home/kio/.lnd/logs)
+      --maxlogfiles=                                         Maximum logfiles to keep (0 for no rotation) (default: 3)
+      --maxlogfilesize=                                      Maximum logfile size in MB (default: 10)
+      --acceptortimeout=                                     Time after which an RPCAcceptor will time out and return false if
+                                                             it hasn't yet received a response (default: 15s)
+      --letsencryptdir=                                      The directory to store Let's Encrypt certificates within
+                                                             (default: /home/kio/.lnd/letsencrypt)
+      --letsencryptlisten=                                   The IP:port on which lnd will listen for Let's Encrypt
+                                                             challenges. Let's Encrypt will always try to contact on port 80.
+                                                             Often non-root processes are not allowed to bind to ports lower
+                                                             than 1024. This configuration option allows a different port to
+                                                             be used, but must be used in combination with port forwarding
+                                                             from port 80. This configuration can also be used to specify
+                                                             another IP address to listen on, for example an IPv6 address.
+                                                             (default: :80)
+      --letsencryptdomain=                                   Request a Let's Encrypt certificate for this domain. Note that
+                                                             the certificate is only requested and stored when the first rpc
+                                                             connection comes in.
+      --rpclisten=                                           Add an interface/port/socket to listen for RPC connections
+      --restlisten=                                          Add an interface/port/socket to listen for REST connections
+      --listen=                                              Add an interface/port to listen for peer connections
+      --externalip=                                          Add an ip:port to the list of local addresses we claim to listen
+                                                             on to peers. If a port is not specified, the default (9735) will
+                                                             be used regardless of other parameters
+      --externalhosts=                                       Add a hostname:port that should be periodically resolved to
+                                                             announce IPs for. If a port is not specified, the default (9735)
+                                                             will be used.
+      --restcors=                                            Add an ip:port/hostname to allow cross origin access from. To
+                                                             allow all origins, set as "*".
+      --nolisten                                             Disable listening for incoming peer connections
+      --norest                                               Disable REST API
+      --no-rest-tls                                          Disable TLS for REST connections
+      --ws-ping-interval=                                    The ping interval for REST based WebSocket connections, set to 0
+                                                             to disable sending ping messages from the server side (default:
+                                                             30s)
+      --ws-pong-wait=                                        The time we wait for a pong response message on REST based
+                                                             WebSocket connections before the connection is closed as inactive
+                                                             (default: 5s)
+      --nat                                                  Toggle NAT traversal support (using either UPnP or NAT-PMP) to
+                                                             automatically advertise your external IP address to the network
+                                                             -- NOTE this does not support devices behind multiple NATs
+      --addpeer=                                             Specify peers to connect to first
+      --minbackoff=                                          Shortest backoff when reconnecting to persistent peers. Valid
+                                                             time units are {s, m, h}. (default: 1s)
+      --maxbackoff=                                          Longest backoff when reconnecting to persistent peers. Valid time
+                                                             units are {s, m, h}. (default: 1h0m0s)
+      --connectiontimeout=                                   The timeout value for network connections. Valid time units are
+                                                             {ms, s, m, h}. (default: 2m0s)
+  -d, --debuglevel=                                          Logging level for all subsystems {trace, debug, info, warn,
+                                                             error, critical} -- You may also specify
+                                                             <global-level>,<subsystem>=<level>,<subsystem2>=<level>,... to
+                                                             set the log level for individual subsystems -- Use show to list
+                                                             available subsystems (default: info)
+      --cpuprofile=                                          Write CPU profile to the specified file
+      --profile=                                             Enable HTTP profiling on either a port or host:port
+      --blockingprofile=                                     Used to enable a blocking profile to be served on the profiling
+                                                             port. This takes a value from 0 to 1, with 1 including every
+                                                             blocking event, and 0 including no events.
+      --mutexprofile=                                        Used to Enable a mutex profile to be served on the profiling
+                                                             port. This takes a value from 0 to 1, with 1 including every
+                                                             mutex event, and 0 including no events.
+      --unsafe-replay                                        Causes a link to replay the adds on its commitment txn after
+                                                             starting up, this enables testing of the sphinx replay logic.
+      --maxpendingchannels=                                  The maximum number of incoming pending channels permitted per
+                                                             peer. (default: 1)
+      --backupfilepath=                                      The target location of the channel backup file
+      --blockcachesize=                                      The maximum capacity of the block cache (default: 20971520)
+      --nobootstrap                                          If true, then automatic network bootstrapping will not be
+                                                             attempted.
+      --noseedbackup                                         If true, NO SEED WILL BE EXPOSED -- EVER, AND THE WALLET WILL BE
+                                                             ENCRYPTED USING THE DEFAULT PASSPHRASE. THIS FLAG IS ONLY FOR
+                                                             TESTING AND SHOULD NEVER BE USED ON MAINNET.
+      --wallet-unlock-password-file=                         The full path to a file (or pipe/device) that contains the
+                                                             password for unlocking the wallet; if set, no unlocking through
+                                                             RPC is possible and lnd will exit if no wallet exists or the
+                                                             password is incorrect; if wallet-unlock-allow-create is also set
+                                                             then lnd will ignore this flag if no wallet exists and allow a
+                                                             wallet to be created through RPC.
+      --wallet-unlock-allow-create                           Don't fail with an error if wallet-unlock-password-file is set
+                                                             but no wallet exists yet.
+      --reset-wallet-transactions                            Removes all transaction history from the on-chain wallet on
+                                                             startup, forcing a full chain rescan starting at the wallet's
+                                                             birthday. Implements the same functionality as btcwallet's
+                                                             dropwtxmgr command. Should be set to false after successful
+                                                             execution to avoid rescanning on every restart of lnd.
+      --coin-selection-strategy=[largest|random]             The strategy to use for selecting coins for wallet transactions.
+                                                             (default: largest)
+      --payments-expiration-grace-period=                    A period to wait before force closing channels with outgoing
+                                                             htlcs that have timed-out and are a result of this node initiated
+                                                             payments.
+      --trickledelay=                                        Time in milliseconds between each release of announcements to the
+                                                             network (default: 90000)
+      --chan-enable-timeout=                                 The duration that a peer connection must be stable before
+                                                             attempting to send a channel update to re-enable or cancel a
+                                                             pending disables of the peer's channels on the network. (default:
+                                                             19m0s)
+      --chan-disable-timeout=                                The duration that must elapse after first detecting that an
+                                                             already active channel is actually inactive and sending channel
+                                                             update disabling it to the network. The pending disable can be
+                                                             canceled if the peer reconnects and becomes stable for
+                                                             chan-enable-timeout before the disable update is sent. (default:
+                                                             20m0s)
+      --chan-status-sample-interval=                         The polling interval between attempts to detect if an active
+                                                             channel has become inactive due to its peer going offline.
+                                                             (default: 1m0s)
+      --height-hint-cache-query-disable                      Disable queries from the height-hint cache to try to recover
+                                                             channels stuck in the pending close state. Disabling height hint
+                                                             queries may cause longer chain rescans, resulting in a
+                                                             performance hit. Unset this after channels are unstuck so you can
+                                                             get better performance again.
+      --alias=                                               The node alias. Used as a moniker by peers and intelligence
+                                                             services
+      --color=                                               The color of the node in hex format (i.e. '#3399FF'). Used to
+                                                             customize node appearance in intelligence services (default:
+                                                             #3399FF)
+      --minchansize=                                         The smallest channel size (in satoshis) that we should accept.
+                                                             Incoming channels smaller than this will be rejected (default:
+                                                             20000)
+      --maxchansize=                                         The largest channel size (in satoshis) that we should accept.
+                                                             Incoming channels larger than this will be rejected
+      --coop-close-target-confs=                             The target number of blocks that a cooperative channel close
+                                                             transaction should confirm in. This is used to estimate the fee
+                                                             to use as the lower bound during fee negotiation for the channel
+                                                             closure. (default: 6)
+      --channel-commit-interval=                             The maximum time that is allowed to pass between receiving a
+                                                             channel state update and signing the next commitment. Setting
+                                                             this to a longer duration allows for more efficient channel
+                                                             operations at the cost of latency. (default: 50ms)
+      --pending-commit-interval=                             The maximum time that is allowed to pass while waiting for the
+                                                             remote party to revoke a locally initiated commitment state.
+                                                             Setting this to a longer duration if a slow response is expected
+                                                             from the remote party or large number of payments are attempted
+                                                             at the same time. (default: 1m0s)
+      --channel-commit-batch-size=                           The maximum number of channel state updates that is accumulated
+                                                             before signing a new commitment. (default: 10)
+      --keep-failed-payment-attempts                         Keeps persistent record of all failed payment attempts for
+                                                             successfully settled payments.
+      --store-final-htlc-resolutions                         Persistently store the final resolution of incoming htlcs.
+      --default-remote-max-htlcs=                            The default max_htlc applied when opening or accepting channels.
+                                                             This value limits the number of concurrent HTLCs that the remote
+                                                             party can add to the commitment. The maximum possible value is
+                                                             483. (default: 483)
+      --numgraphsyncpeers=                                   The number of peers that we should receive new graph updates
+                                                             from. This option can be tuned to save bandwidth for light
+                                                             clients or routing nodes. (default: 3)
+      --historicalsyncinterval=                              The polling interval between historical graph sync attempts. Each
+                                                             historical graph sync attempt ensures we reconcile with the
+                                                             remote peer's graph from the genesis block. (default: 1h0m0s)
+      --ignore-historical-gossip-filters                     If true, will not reply with historical data that matches the
+                                                             range specified by a remote peer's gossip_timestamp_filter. Doing
+                                                             so will result in lower memory and bandwidth requirements.
+      --rejectpush                                           If true, lnd will not accept channel opening requests with
+                                                             non-zero push amounts. This should prevent accidental pushes to
+                                                             merchant nodes.
+      --rejecthtlc                                           If true, lnd will not forward any HTLCs that are meant as onward
+                                                             payments. This option will still allow lnd to send HTLCs and
+                                                             receive HTLCs but lnd won't be used as a hop.
+      --accept-positive-inbound-fees                         If true, lnd will also allow setting positive inbound fees. By
+                                                             default, lnd only allows to set negative inbound fees (an inbound
+                                                             "discount") to remain backwards compatible with senders whose
+                                                             implementations do not yet support inbound fees.
+      --requireinterceptor                                   Whether to always intercept HTLCs, even if no stream is attached
+      --stagger-initial-reconnect                            If true, will apply a randomized staggering between 0s and 30s
+                                                             when reconnecting to persistent peers on startup. The first 10
+                                                             reconnections will be attempted instantly, regardless of the
+                                                             flag's value
+      --max-cltv-expiry=                                     The maximum number of blocks funds could be locked up for when
+                                                             forwarding payments. (default: 2016)
+      --max-channel-fee-allocation=                          The maximum percentage of total funds that can be allocated to a
+                                                             channel's commitment fee. This only applies for the initiator of
+                                                             the channel. Valid values are within [0.1, 1]. (default: 0.5)
+      --max-commit-fee-rate-anchors=                         The maximum fee rate in sat/vbyte that will be used for
+                                                             commitments of channels of the anchors type. Must be large enough
+                                                             to ensure transaction propagation (default: 10)
+      --dry-run-migration                                    If true, lnd will abort committing a migration if it would
+                                                             otherwise have been successful. This leaves the database
+                                                             unmodified, and still compatible with the previously active
+                                                             version of lnd.
+      --enable-upfront-shutdown                              If true, option upfront shutdown script will be enabled. If peers
+                                                             that we open channels with support this feature, we will
+                                                             automatically set the script to which cooperative closes should
+                                                             be paid out to on channel open. This offers the partial
+                                                             protection of a channel peer disconnecting from us if cooperative
+                                                             close is attempted with a different script.
+      --accept-keysend                                       If true, spontaneous payments through keysend will be accepted.
+                                                             [experimental]
+      --accept-amp                                           If true, spontaneous payments via AMP will be accepted.
+      --keysend-hold-time=                                   If non-zero, keysend payments are accepted but not immediately
+                                                             settled. If the payment isn't settled manually after the
+                                                             specified time, it is canceled automatically. [experimental]
+      --gc-canceled-invoices-on-startup                      If true, we'll attempt to garbage collect canceled invoices upon
+                                                             start.
+      --gc-canceled-invoices-on-the-fly                      If true, we'll delete newly canceled invoices on the fly.
+      --dust-threshold=                                      Sets the dust sum threshold in satoshis for a channel after which
+                                                             dust HTLC's will be failed. (default: 500000)
+      --allow-circular-route                                 If true, our node will allow htlc forwards that arrive and depart
+                                                             on the same channel.
+      --http-header-timeout=                                 The maximum duration that the server will wait before timing out
+                                                             reading the headers of an HTTP request. (default: 5s)
+
+Bitcoin:
+      --bitcoin.chaindir=                                    The directory to store the chain's data within.
+      --bitcoin.node=[btcd|bitcoind|neutrino|nochainbackend] The blockchain interface to use. (default: btcd)
+      --bitcoin.mainnet                                      Use the main network
+      --bitcoin.testnet                                      Use the test network
+      --bitcoin.simnet                                       Use the simulation test network
+      --bitcoin.regtest                                      Use the regression test network
+      --bitcoin.signet                                       Use the signet test network
+      --bitcoin.signetchallenge=                             Connect to a custom signet network defined by this challenge
+                                                             instead of using the global default signet test network -- Can be
+                                                             specified multiple times
+      --bitcoin.signetseednode=                              Specify a seed node for the signet network instead of using the
+                                                             global default signet network seed nodes
+      --bitcoin.defaultchanconfs=                            The default number of confirmations a channel must have before
+                                                             it's considered open. If this is not set, we will scale the value
+                                                             according to the channel size.
+      --bitcoin.defaultremotedelay=                          The default number of blocks we will require our channel
+                                                             counterparty to wait before accessing its funds in case of
+                                                             unilateral close. If this is not set, we will scale the value
+                                                             according to the channel size.
+      --bitcoin.maxlocaldelay=                               The maximum blocks we will allow our funds to be timelocked
+                                                             before accessing its funds in case of unilateral close. If a peer
+                                                             proposes a value greater than this, we will reject the channel.
+                                                             (default: 2016)
+      --bitcoin.minhtlc=                                     The smallest HTLC we are willing to accept on our channels, in
+                                                             millisatoshi (default: 1)
+      --bitcoin.minhtlcout=                                  The smallest HTLC we are willing to send out on our channels, in
+                                                             millisatoshi (default: 1000)
+      --bitcoin.basefee=                                     The base fee in millisatoshi we will charge for forwarding
+                                                             payments on our channels (default: 1000)
+      --bitcoin.feerate=                                     The fee rate used when forwarding payments on our channels. The
+                                                             total fee charged is basefee + (amount * feerate / 1000000),
+                                                             where amount is the forwarded amount. (default: 1)
+      --bitcoin.timelockdelta=                               The CLTV delta we will subtract from a forwarded HTLC's timelock
+                                                             value (default: 80)
+      --bitcoin.dnsseed=                                     The seed DNS server(s) to use for initial peer discovery. Must be
+                                                             specified as a '<primary_dns>[,<soa_primary_dns>]' tuple where
+                                                             the SOA address is needed for DNS resolution through Tor but is
+                                                             optional for clearnet users. Multiple tuples can be specified,
+                                                             will overwrite the default seed servers.
+
+btcd:
+      --btcd.dir=                                            The base directory that contains the node's data, logs,
+                                                             configuration file, etc. (default: /home/kio/.btcd)
+      --btcd.rpchost=                                        The daemon's rpc listening address. If a port is omitted, then
+                                                             the default port for the selected chain parameters will be used.
+                                                             (default: localhost)
+      --btcd.rpcuser=                                        Username for RPC connections
+      --btcd.rpcpass=                                        Password for RPC connections
+      --btcd.rpccert=                                        File containing the daemon's certificate file (default:
+                                                             /home/kio/.btcd/rpc.cert)
+      --btcd.rawrpccert=                                     The raw bytes of the daemon's PEM-encoded certificate chain which
+                                                             will be used to authenticate the RPC connection.
+
+bitcoind:
+      --bitcoind.dir=                                        The base directory that contains the node's data, logs,
+                                                             configuration file, etc. (default: /home/kio/.bitcoin)
+      --bitcoind.config=                                     Configuration filepath. If not set, will default to the default
+                                                             filename under 'dir'.
+      --bitcoind.rpccookie=                                  Authentication cookie file for RPC connections. If not set, will
+                                                             default to .cookie under 'dir'.
+      --bitcoind.rpchost=                                    The daemon's rpc listening address. If a port is omitted, then
+                                                             the default port for the selected chain parameters will be used.
+                                                             (default: localhost)
+      --bitcoind.rpcuser=                                    Username for RPC connections
+      --bitcoind.rpcpass=                                    Password for RPC connections
+      --bitcoind.zmqpubrawblock=                             The address listening for ZMQ connections to deliver raw block
+                                                             notifications
+      --bitcoind.zmqpubrawtx=                                The address listening for ZMQ connections to deliver raw
+                                                             transaction notifications
+      --bitcoind.zmqreaddeadline=                            The read deadline for reading ZMQ messages from both the block
+                                                             and tx subscriptions (default: 5s)
+      --bitcoind.estimatemode=                               The fee estimate mode. Must be either ECONOMICAL or CONSERVATIVE.
+                                                             (default: CONSERVATIVE)
+      --bitcoind.pruned-node-max-peers=                      The maximum number of peers lnd will choose from the backend node
+                                                             to retrieve pruned blocks from. This only applies to pruned
+                                                             nodes. (default: 4)
+      --bitcoind.rpcpolling                                  Poll the bitcoind RPC interface for block and transaction
+                                                             notifications instead of using the ZMQ interface
+      --bitcoind.blockpollinginterval=                       The interval that will be used to poll bitcoind for new blocks.
+                                                             Only used if rpcpolling is true.
+      --bitcoind.txpollinginterval=                          The interval that will be used to poll bitcoind for new tx. Only
+                                                             used if rpcpolling is true.
+
+neutrino:
+  -a, --neutrino.addpeer=                                    Add a peer to connect with at startup
+      --neutrino.connect=                                    Connect only to the specified peers at startup
+      --neutrino.maxpeers=                                   Max number of inbound and outbound peers
+      --neutrino.banduration=                                How long to ban misbehaving peers.  Valid time units are {s, m,
+                                                             h}.  Minimum 1 second
+      --neutrino.banthreshold=                               Maximum allowed ban score before disconnecting and banning
+                                                             misbehaving peers.
+      --neutrino.assertfilterheader=                         Optional filter header in height:hash format to assert the state
+                                                             of neutrino's filter header chain on startup. If the assertion
+                                                             does not hold, then the filter header chain will be re-synced
+                                                             from the genesis block.
+      --neutrino.useragentname=                              Used to help identify ourselves to other bitcoin peers (default:
+                                                             neutrino)
+      --neutrino.useragentversion=                           Used to help identify ourselves to other bitcoin peers (default:
+                                                             0.12.0-beta)
+      --neutrino.validatechannels                            Validate every channel in the graph during sync by downloading
+                                                             the containing block. This is the inverse of
+                                                             routing.assumechanvalid, meaning that for Neutrino the validation
+                                                             is turned off by default for massively increased graph sync
+                                                             performance. This speedup comes at the risk of using an
+                                                             unvalidated view of the network for routing. Overwrites the value
+                                                             of routing.assumechanvalid if Neutrino is used. (default: false)
+      --neutrino.broadcasttimeout=                           The amount of time to wait before giving up on a transaction
+                                                             broadcast attempt.
+      --neutrino.persistfilters                              Whether compact filters fetched from the P2P network should be
+                                                             persisted to disk.
+
+Autopilot:
+      --autopilot.active                                     If the autopilot agent should be active or not.
+      --autopilot.heuristic=                                 Heuristic to activate, and the weight to give it during scoring.
+                                                             (default: {top_centrality:1})
+      --autopilot.maxchannels=                               The maximum number of channels that should be created (default: 5)
+      --autopilot.allocation=                                The percentage of total funds that should be committed to
+                                                             automatic channel establishment (default: 0.6)
+      --autopilot.minchansize=                               The smallest channel that the autopilot agent should create
+                                                             (default: 20000)
+      --autopilot.maxchansize=                               The largest channel that the autopilot agent should create
+                                                             (default: 16777215)
+      --autopilot.private                                    Whether the channels created by the autopilot agent should be
+                                                             private or not. Private channels won't be announced to the
+                                                             network.
+      --autopilot.minconfs=                                  The minimum number of confirmations each of your inputs in
+                                                             funding transactions created by the autopilot agent must have.
+                                                             (default: 1)
+      --autopilot.conftarget=                                The confirmation target (in blocks) for channels opened by
+                                                             autopilot. (default: 3)
+
+Tor:
+      --tor.active                                           Allow outbound and inbound connections to be routed through Tor
+      --tor.socks=                                           The host:port that Tor's exposed SOCKS5 proxy is listening on
+                                                             (default: localhost:9050)
+      --tor.dns=                                             The DNS server as host:port that Tor will use for SRV queries -
+                                                             NOTE must have TCP resolution enabled (default:
+                                                             soa.nodes.lightning.directory:53)
+      --tor.streamisolation                                  Enable Tor stream isolation by randomizing user credentials for
+                                                             each connection.
+      --tor.skip-proxy-for-clearnet-targets                  Allow the node to establish direct connections to services not
+                                                             running behind Tor.
+      --tor.control=                                         The host:port that Tor is listening on for Tor control
+                                                             connections (default: localhost:9051)
+      --tor.targetipaddress=                                 IP address that Tor should use as the target of the hidden service
+      --tor.password=                                        The password used to arrive at the HashedControlPassword for the
+                                                             control port. If provided, the HASHEDPASSWORD authentication
+                                                             method will be used instead of the SAFECOOKIE one.
+      --tor.v2                                               Automatically set up a v2 onion service to listen for inbound
+                                                             connections
+      --tor.v3                                               Automatically set up a v3 onion service to listen for inbound
+                                                             connections
+      --tor.privatekeypath=                                  The path to the private key of the onion service being created
+      --tor.encryptkey                                       Encrypts the Tor private key file on disk
+      --tor.watchtowerkeypath=                               The path to the private key of the watchtower onion service being
+                                                             created
+
+routerrpc:
+      --routerrpc.estimator=[apriori|bimodal]                Probability estimator used for pathfinding. (default: apriori)
+      --routerrpc.minrtprob=                                 Minimum required route success probability to attempt the payment
+                                                             (default: 0.01)
+      --routerrpc.attemptcost=                               The fixed (virtual) cost in sats of a failed payment attempt
+                                                             (default: 100)
+      --routerrpc.attemptcostppm=                            The proportional (virtual) cost in sats of a failed payment
+                                                             attempt expressed in parts per million of the total payment
+                                                             amount (default: 1000)
+      --routerrpc.maxmchistory=                              the maximum number of payment results that are held on disk by
+                                                             mission control (default: 1000)
+      --routerrpc.mcflushinterval=                           the timer interval to use to flush mission control state to the
+                                                             DB (default: 1s)
+      --routerrpc.fee-estimation-timeout=                    the maximum time to wait for routing fees to be estimated by
+                                                             payment probes (default: 1m0s)
+      --routerrpc.usestatusinitiated                         If true, the router will send Payment_INITIATED for new payments,
+                                                             otherwise Payment_In_FLIGHT will be sent for compatibility
+                                                             concerns.
+      --routerrpc.routermacaroonpath=                        Path to the router macaroon
+
+apriori:
+      --routerrpc.apriori.hopprob=                           Assumed success probability of a hop in a route when no other
+                                                             information is available. (default: 0.6)
+      --routerrpc.apriori.weight=                            Weight of the a priori probability in success probability
+                                                             estimation. Valid values are in [0, 1]. (default: 0.5)
+      --routerrpc.apriori.penaltyhalflife=                   Defines the duration after which a penalized node or channel is
+                                                             back at 50% probability (default: 1h0m0s)
+      --routerrpc.apriori.capacityfraction=                  Defines the fraction of channels' capacities that is considered
+                                                             liquid. Valid values are in [0.75, 1]. (default: 0.9999)
+
+bimodal:
+      --routerrpc.bimodal.scale=                             Defines the unbalancedness assumed for the network, the amount
+                                                             defined in msat. (default: 300000000)
+      --routerrpc.bimodal.nodeweight=                        Defines how strongly non-routed channels should be taken into
+                                                             account for probability estimation. Valid values are in [0, 1].
+                                                             (default: 0.2)
+      --routerrpc.bimodal.decaytime=                         Describes the information decay of knowledge about previous
+                                                             successes and failures in channels. (default: 168h0m0s)
+
+fee:
+      --fee.url=                                             Optional URL for external fee estimation. If no URL is specified,
+                                                             the method for fee estimation will depend on the chosen backend
+                                                             and network. Must be set for neutrino on mainnet.
+      --fee.min-update-timeout=                              The minimum interval in which fees will be updated from the
+                                                             specified fee URL. (default: 5m0s)
+      --fee.max-update-timeout=                              The maximum interval in which fees will be updated from the
+                                                             specified fee URL. (default: 20m0s)
+
+invoices:
+      --invoices.holdexpirydelta=                            The number of blocks before a hold invoice's htlc expires that
+                                                             the invoice should be canceled to prevent a force close. Force
+                                                             closes will not be prevented if this value is not greater than
+                                                             DefaultIncomingBroadcastDelta. (default: 12)
+
+routing:
+      --routing.strictgraphpruning                           If true, then the graph will be pruned more aggressively for
+                                                             zombies. In practice this means that edges with a single stale
+                                                             edge will be considered a zombie.
+
+gossip:
+      --gossip.pinned-syncers=                               A set of peers that should always remain in an active sync state,
+                                                             which can be used to closely synchronize the routing tables of
+                                                             two nodes. The value should be a hex-encoded pubkey, the flag can
+                                                             be specified multiple times to add multiple peers. Connected
+                                                             peers matching this pubkey will remain active for the duration of
+                                                             the connection and not count towards the NumActiveSyncer count.
+      --gossip.max-channel-update-burst=                     The maximum number of updates for a specific channel and
+                                                             direction that lnd will accept over the channel update interval.
+                                                             (default: 10)
+      --gossip.channel-update-interval=                      The interval used to determine how often lnd should allow a burst
+                                                             of new updates for a specific channel and direction. (default:
+                                                             1m0s)
+      --gossip.sub-batch-delay=                              The duration to wait before sending the next announcement batch
+                                                             if there are multiple. Use a small value if there are a lot
+                                                             announcements and they need to be broadcast quickly. (default: 5s)
+
+workers:
+      --workers.read=                                        Maximum number of concurrent read pool workers. This number
+                                                             should be proportional to the number of peers. (default: 100)
+      --workers.write=                                       Maximum number of concurrent write pool workers. This number
+                                                             should be proportional to the number of CPUs on the host.
+                                                             (default: 8)
+      --workers.sig=                                         Maximum number of concurrent sig pool workers. This number should
+                                                             be proportional to the number of CPUs on the host. (default: 8)
+
+caches:
+      --caches.reject-cache-size=                            Maximum number of entries contained in the reject cache, which is
+                                                             used to speed up filtering of new channel announcements and
+                                                             channel updates from peers. Each entry requires 25 bytes.
+                                                             (default: 50000)
+      --caches.channel-cache-size=                           Maximum number of entries contained in the channel cache, which
+                                                             is used to reduce memory allocations from gossip queries from
+                                                             peers. Each entry requires roughly 2Kb. (default: 20000)
+      --caches.rpc-graph-cache-duration=                     The period of time expressed as a duration (1s, 1m, 1h, etc) that
+                                                             the RPC response to DescribeGraph should be cached for.
+
+wtclient:
+      --wtclient.active                                      Whether the daemon should use private watchtowers to back up
+                                                             revoked channel states.
+      --wtclient.sweep-fee-rate=                             Specifies the fee rate in sat/byte to be used when constructing
+                                                             justice transactions sent to the watchtower. (default: 10)
+      --wtclient.session-close-range=                        The range over which to choose a random number of blocks to wait
+                                                             after the last channel of a session is closed before sending the
+                                                             DeleteSession message to the tower server. Set to 1 for no delay.
+                                                             (default: 288)
+      --wtclient.max-tasks-in-mem-queue=                     The maximum number of updates that should be queued in memory
+                                                             before overflowing to disk. (default: 2000)
+      --wtclient.max-updates=                                The maximum number of updates to be backed up in a single
+                                                             session. (default: 1024)
+
+watchtower:
+      --watchtower.active                                    If the watchtower should be active or not
+      --watchtower.towerdir=                                 Directory of the watchtower.db (default:
+                                                             /home/kio/.lnd/data/watchtower)
+      --watchtower.listen=                                   Add interfaces/ports to listen for peer connections
+      --watchtower.externalip=                               Add interfaces/ports where the watchtower can accept peer
+                                                             connections
+      --watchtower.readtimeout=                              Duration the watchtower server will wait for messages to be
+                                                             received before hanging up on clients (default: 15s)
+      --watchtower.writetimeout=                             Duration the watchtower server will wait for messages to be
+                                                             written before hanging up on client connections (default: 15s)
+
+protocol:
+      --protocol.wumbo-channels                              if set, then lnd will create and accept requests for channels
+                                                             larger chan 0.16 BTC
+      --protocol.simple-taproot-chans                        if set, then lnd will create and accept requests for channels
+                                                             using the simple taproot commitment type
+      --protocol.no-anchors                                  disable support for anchor commitments
+      --protocol.no-script-enforced-lease                    disable support for script enforced lease commitments
+      --protocol.option-scid-alias                           enable support for option_scid_alias channels
+      --protocol.zero-conf                                   enable support for zero-conf channels, must have
+                                                             option-scid-alias set also
+      --protocol.no-any-segwit                               disallow using any segwit witness version as a co-op close address
+      --protocol.no-timestamp-query-option                   do not query syncing peers for announcement timestamps and do not
+                                                             respond with timestamps if requested
+      --protocol.no-route-blinding                           do not forward payments that are a part of a blinded route
+      --protocol.custom-message=                             allows the custom message apis to send and report messages with
+                                                             the protocol number provided that fall outside of the custom
+                                                             message number range.
+      --protocol.custom-init=                                custom feature bits — numbers defined in BOLT 9 — to
+                                                             advertise in the node's init message
+      --protocol.custom-nodeann=                             custom feature bits — numbers defined in BOLT 9 — to
+                                                             advertise in the node's announcement message
+      --protocol.custom-invoice=                             custom feature bits — numbers defined in BOLT 9 — to
+                                                             advertise in the node's invoices
+
+chainbackend:
+      --healthcheck.chainbackend.interval=                   How often to run a health check. (default: 1m0s)
+      --healthcheck.chainbackend.attempts=                   The number of calls we will make for the check before failing.
+                                                             Set this value to 0 to disable a check. (default: 3)
+      --healthcheck.chainbackend.timeout=                    The amount of time we allow the health check to take before
+                                                             failing due to timeout. (default: 30s)
+      --healthcheck.chainbackend.backoff=                    The amount of time to back-off between failed health checks.
+                                                             (default: 2m0s)
+
+diskspace:
+      --healthcheck.diskspace.diskrequired=                  The minimum ratio of free disk space to total capacity that we
+                                                             allow before shutting lnd down safely. (default: 0.1)
+      --healthcheck.diskspace.interval=                      How often to run a health check. (default: 12h0m0s)
+      --healthcheck.diskspace.attempts=                      The number of calls we will make for the check before failing.
+                                                             Set this value to 0 to disable a check.
+      --healthcheck.diskspace.timeout=                       The amount of time we allow the health check to take before
+                                                             failing due to timeout. (default: 5s)
+      --healthcheck.diskspace.backoff=                       The amount of time to back-off between failed health checks.
+                                                             (default: 1m0s)
+
+tls:
+      --healthcheck.tls.interval=                            How often to run a health check. (default: 1m0s)
+      --healthcheck.tls.attempts=                            The number of calls we will make for the check before failing.
+                                                             Set this value to 0 to disable a check.
+      --healthcheck.tls.timeout=                             The amount of time we allow the health check to take before
+                                                             failing due to timeout. (default: 5s)
+      --healthcheck.tls.backoff=                             The amount of time to back-off between failed health checks.
+                                                             (default: 1m0s)
+
+torconnection:
+      --healthcheck.torconnection.interval=                  How often to run a health check. (default: 1m0s)
+      --healthcheck.torconnection.attempts=                  The number of calls we will make for the check before failing.
+                                                             Set this value to 0 to disable a check.
+      --healthcheck.torconnection.timeout=                   The amount of time we allow the health check to take before
+                                                             failing due to timeout. (default: 5s)
+      --healthcheck.torconnection.backoff=                   The amount of time to back-off between failed health checks.
+                                                             (default: 1m0s)
+
+remotesigner:
+      --healthcheck.remotesigner.interval=                   How often to run a health check. (default: 1m0s)
+      --healthcheck.remotesigner.attempts=                   The number of calls we will make for the check before failing.
+                                                             Set this value to 0 to disable a check. (default: 1)
+      --healthcheck.remotesigner.timeout=                    The amount of time we allow the health check to take before
+                                                             failing due to timeout. (default: 1s)
+      --healthcheck.remotesigner.backoff=                    The amount of time to back-off between failed health checks.
+                                                             (default: 30s)
+
+db:
+      --db.backend=                                          The selected database backend. (default: bolt)
+      --db.batch-commit-interval=                            The maximum duration the channel graph batch schedulers will wait
+                                                             before attempting to commit a batch of pending updates. This can
+                                                             be tradeoff database contenion for commit latency. (default:
+                                                             500ms)
+      --db.use-native-sql                                    Use native SQL for tables that already support it.
+      --db.no-graph-cache                                    Don't use the in-memory graph cache for path finding. Much slower
+                                                             but uses less RAM. Can only be used with a bolt database backend.
+      --db.prune-revocation                                  Run the optional migration that prunes the revocation logs to
+                                                             save disk space.
+      --db.no-rev-log-amt-data                               If set, the to-local and to-remote output amounts of revoked
+                                                             commitment transactions will not be stored in the revocation log.
+                                                             Note that once this data is lost, a watchtower client will not be
+                                                             able to back up the revoked state.
+
+etcd:
+      --db.etcd.embedded                                     Use embedded etcd instance instead of the external one. Note: use
+                                                             for testing only.
+      --db.etcd.embedded_client_port=                        Client port to use for the embedded instance. Note: use for
+                                                             testing only.
+      --db.etcd.embedded_peer_port=                          Peer port to use for the embedded instance. Note: use for testing
+                                                             only.
+      --db.etcd.embedded_log_file=                           Optional log file to use for embedded instance logs. note: use
+                                                             for testing only.
+      --db.etcd.host=                                        Etcd database host.
+      --db.etcd.user=                                        Etcd database user.
+      --db.etcd.pass=                                        Password for the database user.
+      --db.etcd.namespace=                                   The etcd namespace to use.
+      --db.etcd.disabletls                                   Disable TLS for etcd connection. Caution: use for development
+                                                             only.
+      --db.etcd.cert_file=                                   Path to the TLS certificate for etcd RPC.
+      --db.etcd.key_file=                                    Path to the TLS private key for etcd RPC.
+      --db.etcd.insecure_skip_verify                         Whether we intend to skip TLS verification
+      --db.etcd.collect_stats                                Whether to collect etcd commit stats.
+      --db.etcd.max_msg_size=                                The maximum message size in bytes that we may send to etcd.
+                                                             (default: 33554432)
+
+bolt:
+      --db.bolt.nofreelistsync                               Whether the databases used within lnd should sync their freelist
+                                                             to disk. This is set to true by default, meaning we don't sync
+                                                             the free-list resulting in improved memory performance during
+                                                             operation, but with an increase in startup time.
+      --db.bolt.auto-compact                                 Whether the databases used within lnd should automatically be
+                                                             compacted on every startup (and if the database has the
+                                                             configured minimum age). This is disabled by default because it
+                                                             requires additional disk space to be available during the
+                                                             compaction that is freed afterwards. In general compaction leads
+                                                             to smaller database files.
+      --db.bolt.auto-compact-min-age=                        How long ago the last compaction of a database file must be for
+                                                             it to be considered for auto compaction again. Can be set to 0 to
+                                                             compact on every startup. (default: 168h0m0s)
+      --db.bolt.dbtimeout=                                   Specify the timeout value used when opening the database.
+                                                             (default: 1m0s)
+
+postgres:
+      --db.postgres.dsn=                                     Database connection string.
+      --db.postgres.timeout=                                 Database connection timeout. Set to zero to disable.
+      --db.postgres.maxconnections=                          The maximum number of open connections to the database. Set to
+                                                             zero for unlimited. (default: 50)
+      --db.postgres.skipmigrations                           Skip applying migrations on startup.
+
+sqlite:
+      --db.sqlite.timeout=                                   The time after which a database query should be timed out.
+      --db.sqlite.busytimeout=                               The maximum amount of time to wait for a database connection to
+                                                             become available for a query. (default: 5s)
+      --db.sqlite.maxconnections=                            The maximum number of open connections to the database. Set to
+                                                             zero for unlimited. (default: 2)
+      --db.sqlite.pragmaoptions=                             A list of pragma options to set on a database connection. For
+                                                             example, 'auto_vacuum=incremental'. Note that the flag must be
+                                                             specified multiple times if multiple options are to be set.
+      --db.sqlite.skipmigrations                             Skip applying migrations on startup.
+
+cluster:
+      --cluster.enable-leader-election                       Enables leader election if set.
+      --cluster.leader-elector=[etcd]                        Leader elector to use. Valid values: "etcd". (default: etcd)
+      --cluster.etcd-election-prefix=                        Election key prefix when using etcd leader elector. (default:
+                                                             /leader/)
+      --cluster.id=                                          Identifier for this node inside the cluster (used in leader
+                                                             election). Defaults to the hostname. (default: archlinux)
+      --cluster.leader-session-ttl=                          The TTL in seconds to use for the leader election session.
+                                                             (default: 60)
+
+rpcmiddleware:
+      --rpcmiddleware.enable                                 Enable the RPC middleware interceptor functionality.
+      --rpcmiddleware.intercepttimeout=                      Time after which a RPC middleware intercept request will time out
+                                                             and return an error if it hasn't yet received a response.
+                                                             (default: 2s)
+      --rpcmiddleware.addmandatory=                          Add the named middleware to the list of mandatory middlewares.
+                                                             All RPC requests are blocked/denied if any of the mandatory
+                                                             middlewares is not registered. Can be specified multiple times.
+
+remotesigner:
+      --remotesigner.enable                                  Use a remote signer for signing any on-chain related transactions
+                                                             or messages. Only recommended if local wallet is initialized as
+                                                             watch-only. Remote signer must use the same seed/root key as the
+                                                             local watch-only wallet but must have private keys.
+      --remotesigner.rpchost=                                The remote signer's RPC host:port
+      --remotesigner.macaroonpath=                           The macaroon to use for authenticating with the remote signer
+      --remotesigner.tlscertpath=                            The TLS certificate to use for establishing the remote signer's
+                                                             identity
+      --remotesigner.timeout=                                The timeout for connecting to and signing requests with the
+                                                             remote signer. Valid time units are {s, m, h}. (default: 5s)
+      --remotesigner.migrate-wallet-to-watch-only            If a wallet with private key material already exists, migrate it
+                                                             into a watch-only wallet on first startup. WARNING: This cannot
+                                                             be undone! Make sure you have backed up your seed before you use
+                                                             this flag! All private keys will be purged from the wallet after
+                                                             first unlock with this flag!
+
+sweeper:
+      --sweeper.maxfeerate=                                  Maximum fee rate in sat/vb that the sweeper is allowed to use
+                                                             when sweeping funds, the fee rate derived from budgets are capped
+                                                             at this value. Setting this value too low can result in
+                                                             transactions not being confirmed in time, causing HTLCs to expire
+                                                             hence potentially losing funds. (default: 1000)
+      --sweeper.nodeadlineconftarget=                        The conf target to use when sweeping non-time-sensitive outputs.
+                                                             This is useful for sweeping outputs that are not time-sensitive,
+                                                             and can be swept at a lower fee rate. (default: 1008)
+      --sweeper.budget=                                      An optional config group that's used for the automatic sweep fee
+                                                             estimation. The Budget config gives options to limits ones fee
+                                                             exposure when sweeping unilateral close outputs and the fee rate
+                                                             calculated from budgets is capped at sweeper.maxfeerate. Check
+                                                             the budget config options for more details.
+
+sweeper.budget:
+      --sweeper.budget.tolocal=                              The amount in satoshis to allocate as the budget to pay fees when
+                                                             sweeping the to_local output. If set, the budget calculated using
+                                                             the ratio (if set) will be capped at this value.
+      --sweeper.budget.tolocalratio=                         The ratio of the value in to_local output to allocate as the
+                                                             budget to pay fees when sweeping it. (default: 0.5)
+      --sweeper.budget.anchorcpfp=                           The amount in satoshis to allocate as the budget to pay fees when
+                                                             CPFPing a force close tx using the anchor output. If set, the
+                                                             budget calculated using the ratio (if set) will be capped at this
+                                                             value.
+      --sweeper.budget.anchorcpfpratio=                      The ratio of a special value to allocate as the budget to pay
+                                                             fees when CPFPing a force close tx using the anchor output. The
+                                                             special value is the sum of all time-sensitive HTLCs on this
+                                                             commitment subtracted by their budgets. (default: 0.5)
+      --sweeper.budget.deadlinehtlc=                         The amount in satoshis to allocate as the budget to pay fees when
+                                                             sweeping a time-sensitive (first-level) HTLC. If set, the budget
+                                                             calculated using the ratio (if set) will be capped at this value.
+      --sweeper.budget.deadlinehtlcratio=                    The ratio of the value in a time-sensitive (first-level) HTLC to
+                                                             allocate as the budget to pay fees when sweeping it. (default:
+                                                             0.5)
+      --sweeper.budget.nodeadlinehtlc=                       The amount in satoshis to allocate as the budget to pay fees when
+                                                             sweeping a non-time-sensitive (second-level) HTLC. If set, the
+                                                             budget calculated using the ratio (if set) will be capped at this
+                                                             value.
+      --sweeper.budget.nodeadlinehtlcratio=                  The ratio of the value in a non-time-sensitive (second-level)
+                                                             HTLC to allocate as the budget to pay fees when sweeping it.
+                                                             (default: 0.5)
+
+htlcswitch:
+      --htlcswitch.mailboxdeliverytimeout=                   The timeout value when delivering HTLCs to a channel link.
+                                                             Setting this value too small will result in local payment
+                                                             failures if large number of payments are sent over a short
+                                                             period. (default: 1m0s)
+
+grpc:
+      --grpc.server-ping-time=                               How long the server waits on a gRPC stream with no activity
+                                                             before pinging the client. (default: 1m0s)
+      --grpc.server-ping-timeout=                            How long the server waits for the response from the client for
+                                                             the keepalive ping response. (default: 20s)
+      --grpc.client-ping-min-wait=                           The minimum amount of time the client should wait before sending
+                                                             a keepalive ping. (default: 5s)
+      --grpc.client-allow-ping-without-stream                If true, the server allows keepalive pings from the client even
+                                                             when there are no active gRPC streams. This might be useful to
+                                                             keep the underlying HTTP/2 connection open for future requests.
+
+Help Options:
+  -h, --help                                                 Show this help message
+```
